@@ -38,6 +38,10 @@ public class GameService {
                 .map(gameMapper::toDTO)
                 .collect(Collectors.toList());
     }
+    public void deleteById(Long id) throws GameNotFoundException{
+        verifyIfExists(id);
+        gameRepository.deleteById(id);
+    }
 
     private void verifyIfIsAlreadyRegistered(String name) throws GameAlreadyRegisteredException{
         Optional<Game> optSaverGame = gameRepository.findByName(name);
