@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,10 +22,10 @@ public class GameService {
     private final GameRepository gameRepository;
     private final GameMapper gameMapper = GameMapper.INSTANCE;
 
-    public GameDTO createGame(GameDTO gameDTO) throws GameAlreadyRegisteredException{
+    public GameDTO createGame(@Valid GameDTO gameDTO) throws GameAlreadyRegisteredException{
         verifyIfIsAlreadyRegistered(gameDTO.getName());
-        Game game = gameMapper.toModel(gameDTO);
-        Game savedGame = gameRepository.save(game);
+        Game gameToSave = gameMapper.toModel(gameDTO);
+        Game savedGame = gameRepository.save(gameToSave);
         return gameMapper.toDTO(savedGame);
     }
     public GameDTO findByName(String name) throws GameNotFoundException{

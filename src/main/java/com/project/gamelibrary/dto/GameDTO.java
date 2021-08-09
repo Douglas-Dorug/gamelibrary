@@ -1,10 +1,11 @@
 package com.project.gamelibrary.dto;
 
-import com.sun.istack.NotNull;
+import com.project.gamelibrary.enums.GameType;
 import lombok.*;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
@@ -15,19 +16,20 @@ public class GameDTO {
 
     private Long id;
 
-    @NotNull
+    @NotEmpty
     @Size(min = 1, max = 50)
     private String name;
 
-    @NotNull
+    @NotEmpty
     @Size(min = 4, max = 4)
     private String launchAge;
 
-    @NotNull
+    @NotEmpty
     @Size(min = 1, max = 50)
     private String companyName;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
-    private String type;
+    private GameType type;
+
+
 }

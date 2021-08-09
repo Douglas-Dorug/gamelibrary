@@ -1,6 +1,8 @@
 package com.project.gamelibrary.entity;
 
+import com.project.gamelibrary.enums.GameType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +10,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Game {
@@ -19,12 +22,14 @@ public class Game {
     private String name;
 
     @Column(nullable = false)
-    private String launchDate;
+    private String launchAge;
 
     @Column(nullable = false)
     private String companyName;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String type;
+    private GameType type;
+
+
 }
