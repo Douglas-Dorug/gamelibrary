@@ -18,6 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.Assertions;
 
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.*;
@@ -102,4 +105,31 @@ public class GameServiceTest {
 
     }
 
+    @Test
+    void whenListGameIsCalledThenReturnAListOfGames() {
+        //given
+        GameDTO expectedFoundGameDTO = GameDTOBuilder.builder().build().toGameDTO();
+        Game expectedFoundGame = gameMapper.toModel(expectedFoundGameDTO);
+
+        //when
+        Mockito.when(gameRepository.findAll()).thenReturn(Collections.singletonList(expectedFoundGame));
+
+        //then
+        List<GameDTO> foundGameDTO = gameService.listAll();
+
+        assertThat(foundGameDTO, is(not(empty())));
+        assertThat(foundGameDTO.get(0), is(equalTo(expectedFoundGameDTO)));
+    }
+
+    @Test
+    void whenListGameIsCalledThenReturnAnEmptyListOfGames() {
+
+        //when
+        Mockito.when(gameRepository.findAll()).thenReturn(Collections.EMPTY_LIST);
+
+        //then
+        List<GameDTO> foundListGameDTO = gameService.listAll();
+
+        assertThat(foundListGameDTO, is(empty()));
+    }
 }

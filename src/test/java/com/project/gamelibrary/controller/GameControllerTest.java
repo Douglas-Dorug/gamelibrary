@@ -23,6 +23,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import java.util.Collections;
+
 import static com.project.gamelibrary.utils.JsonConvertionUtils.asJsonString;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -112,5 +114,22 @@ public class GameControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(GAME_API_URL_PATH + "/" + gameDTO.getName())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenGETListWithGamesIsCalledThenOkStatusIsReturned() throws Exception {
+        //given
+        GameDTO gameDTO = GameDTOBuilder.builder().build().toGameDTO();
+
+        //when
+        Mockito.when(gameService.listAll()).thenReturn(Collections.singletonList(gameDTO));
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.get(GAME_API_URL_PATH)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name", is(gameDTO.getName())))
+                .andExpect(jsonPath("$[0].companyName", is(gameDTO.getCompanyName())))
+                .andExpect(jsonPath("$[0].type", is(gameDTO.getType().toString())));
     }
 }
