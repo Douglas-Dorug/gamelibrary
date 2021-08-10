@@ -67,11 +67,11 @@ mvn spring-boot:run
 
 #### Controller(Test)
 
--Camada responsável por testar o funcionamento das funções presentes na camada de controle do código.
+- Camada responsável por testar o funcionamento das funções presentes na camada de controle do código.
 
 #### Service(Test)
 
--Camada responsável por testar o funcionamento das funções presentes na camada de serviços do código.
+- Camada responsável por testar o funcionamento das funções presentes na camada de serviços do código.
 
 ### Iniciando os Testes
 
