@@ -132,4 +132,46 @@ public class GameControllerTest {
                 .andExpect(jsonPath("$[0].companyName", is(gameDTO.getCompanyName())))
                 .andExpect(jsonPath("$[0].type", is(gameDTO.getType().toString())));
     }
+
+    @Test
+    void whenGETListWithoutGameIsCalledThenOkStatusIsReturned() throws Exception {
+        //given
+        GameDTO gameDTO = GameDTOBuilder.builder().build().toGameDTO();
+
+        //when
+        Mockito.when(gameService.listAll()).thenReturn(Collections.singletonList(gameDTO));
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.get(GAME_API_URL_PATH)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void whenDELETEIsCalledWithValidIdThenNoContentStatusIsReturned() throws Exception {
+        //given
+        GameDTO gameDTO = GameDTOBuilder.builder().build().toGameDTO();
+
+        //when
+        Mockito.doNothing().when(gameService).deleteById(gameDTO.getId());
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.delete(GAME_API_URL_PATH + "/" + gameDTO.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void whenDELETEIsCalledWithInvalidIdThenNoContentStatusIsReturned() throws Exception {
+        //given
+        GameDTO gameDTO = GameDTOBuilder.builder().build().toGameDTO();
+
+        //when
+        Mockito.doThrow(GameNotFoundException.class).when(gameService).deleteById(INVALID_GAME_ID);
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.delete(GAME_API_URL_PATH + "/" + INVALID_GAME_ID)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 }

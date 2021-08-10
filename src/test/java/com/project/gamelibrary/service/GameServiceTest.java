@@ -132,4 +132,21 @@ public class GameServiceTest {
 
         assertThat(foundListGameDTO, is(empty()));
     }
+
+    @Test
+    void whenExclusionIsCalledWithValidIdThenAGameShouldBeDeleted() throws GameNotFoundException {
+        //given
+        GameDTO expectedDeletedGameDTO = GameDTOBuilder.builder().build().toGameDTO();
+        Game expectedDeletedGame = gameMapper.toModel(expectedDeletedGameDTO);
+
+        //when
+        Mockito.when(gameRepository.findById(expectedDeletedGameDTO.getId())).thenReturn(Optional.of(expectedDeletedGame));
+        Mockito.doNothing().when(gameRepository).deleteById(expectedDeletedGameDTO.getId());
+
+        //then
+        gameService.deleteById(expectedDeletedGameDTO.getId());
+
+        Mockito.verify(gameRepository, Mockito.times(1)).findById(expectedDeletedGameDTO.getId());
+        Mockito.verify(gameRepository, Mockito.times(1)).deleteById(expectedDeletedGameDTO.getId());
+    }
 }
